@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AssetStatus {
+  DISPONIVEL    @map("Disponível")
+  EM_USO        @map("Em Uso")
+  EM_MANUTENCAO @map("Em Manutenção")
+}
+
+model Company {
+  id        String     @id @default(uuid())
+  name      String
+  cnpj      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("companies")
+}
+
+model Employee {
+  id        String          @id @default(uuid())
+  name      String
+  email     String          @unique
+  cpf       String          @unique
+  companyId String          @map("company_id")
+  company   Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  assets    AssetEmployee[]
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("employees")
+}
+
+model Asset {
+  id        String          @id @default(uuid())
+  name      String
+  type      String
+  status    AssetStatus     @default(DISPONIVEL)
+  employees AssetEmployee[]
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("assets")
+}
+
+model AssetEmployee {
+  id         String   @id @default(uuid())
+  assetId    String   @map("asset_id")
+  employeeId String   @map("employee_id")
+  asset      Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  @@unique([assetId, employeeId])
+  @@map("asset_employees")
+}
