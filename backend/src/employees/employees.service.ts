@@ -1,13 +1,13 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
-  ConflictException,
 } from '@nestjs/common';
-import { EmployeesRepository } from './employees.repository';
+import { Employee } from '@prisma/client';
 import { CompaniesService } from '../companies/companies.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { Employee } from '@prisma/client';
+import { EmployeesRepository } from './employees.repository';
 
 @Injectable()
 export class EmployeesService {
