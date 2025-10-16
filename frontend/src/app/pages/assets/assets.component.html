@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Assets</h1>
+      <p class="page-subtitle">Manage your organization's assets and equipment</p>
+    </div>
+    <button mat-raised-button color="primary" class="create-button" (click)="createAsset()">
+      <mat-icon>add</mat-icon>
+      Create Asset
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <table mat-table [dataSource]="assets" class="assets-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Asset</th>
+        <td mat-cell *matCellDef="let asset">
+          <div class="asset-name">{{ asset.name }}</div>
+        </td>
+      </ng-container>
+
+      <!-- Type Column -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let asset">
+          <span class="asset-type">{{ asset.type }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let asset">
+          <mat-chip [class]="getStatusClass(asset.status)">
+            {{ getStatusLabel(asset.status) }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Created Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Created</th>
+        <td mat-cell *matCellDef="let asset">{{ asset.createdAt | date: 'MMM d, y' }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let asset">
+          <button mat-icon-button (click)="editAsset(asset)" class="action-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteAsset(asset)" class="action-button delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+    </table>
+
+    <div *ngIf="assets.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">devices</mat-icon>
+      <h3>No assets yet</h3>
+      <p>Get started by adding your first asset</p>
+      <button mat-raised-button color="primary" (click)="createAsset()">
+        <mat-icon>add</mat-icon>
+        Create Asset
+      </button>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,138 @@
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #888;
+  margin: 0;
+}
+
+.create-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 48px;
+  font-weight: 600;
+
+  mat-icon {
+    margin-right: 0;
+  }
+}
+
+.table-card {
+  background-color: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.companies-table {
+  width: 100%;
+  background-color: transparent;
+
+  th {
+    background-color: #0a0a0a;
+    color: #888;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  td {
+    color: #ffffff;
+    padding: 20px 24px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .table-row {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #0f0f0f;
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+.company-name {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.action-button {
+  color: #888;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #ffffff;
+    background-color: #1a1a1a;
+  }
+
+  &.delete:hover {
+    color: #ef4444;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #333;
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #888;
+    margin: 0 0 24px 0;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

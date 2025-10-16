@@ -1,0 +1,23 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="logo-container">
+      <h1 class="logo-text">Forte</h1>
+      <p class="logo-subtitle">Asset Manager</p>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <a mat-list-item
+         *ngFor="let item of menuItems"
+         [routerLink]="item.path"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
