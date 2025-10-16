@@ -5,15 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-
-interface Employee {
-  id: string;
-  name: string;
-  email: string;
-  cpf: string;
-  companyName: string;
-  createdAt: string;
-}
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Employee } from '../../models/employee.model';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-employees',
@@ -24,7 +19,9 @@ interface Employee {
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss'
@@ -32,40 +29,30 @@ interface Employee {
 export class EmployeesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'cpf', 'company', 'actions'];
   employees: Employee[] = [];
+  loading = false;
+
+  constructor(
+    private employeeService: EmployeeService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    // TODO: Load employees from API
     this.loadEmployees();
   }
 
   loadEmployees(): void {
-    // Mock data for now
-    this.employees = [
-      {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@acme.com',
-        cpf: '123.456.789-00',
-        companyName: 'Acme Corporation',
-        createdAt: '2025-01-20'
+    this.loading = true;
+    this.employeeService.getAll().subscribe({
+      next: (employees) => {
+        this.employees = employees;
+        this.loading = false;
       },
-      {
-        id: '2',
-        name: 'Jane Smith',
-        email: 'jane.smith@global.com',
-        cpf: '987.654.321-00',
-        companyName: 'Global Industries',
-        createdAt: '2025-02-15'
-      },
-      {
-        id: '3',
-        name: 'Bob Johnson',
-        email: 'bob.johnson@tech.com',
-        cpf: '555.666.777-88',
-        companyName: 'Tech Innovations',
-        createdAt: '2025-03-01'
+      error: (error) => {
+        console.error('Error loading employees:', error);
+        this.snackBar.open('Error loading employees', 'Close', { duration: 3000 });
+        this.loading = false;
       }
-    ];
+    });
   }
 
   createEmployee(): void {
@@ -79,7 +66,17 @@ export class EmployeesComponent implements OnInit {
   }
 
   deleteEmployee(employee: Employee): void {
-    // TODO: Confirm and delete employee
-    console.log('Delete employee:', employee);
+    if (confirm(`Are you sure you want to delete ${employee.name}?`)) {
+      this.employeeService.delete(employee.id).subscribe({
+        next: () => {
+          this.snackBar.open('Employee deleted successfully', 'Close', { duration: 3000 });
+          this.loadEmployees();
+        },
+        error: (error) => {
+          console.error('Error deleting employee:', error);
+          this.snackBar.open('Error deleting employee', 'Close', { duration: 3000 });
+        }
+      });
+    }
   }
 }

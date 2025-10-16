@@ -48,6 +48,13 @@
   padding: 0;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
 .employees-table {
   width: 100%;
   background-color: transparent;

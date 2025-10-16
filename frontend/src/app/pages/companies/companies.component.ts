@@ -4,13 +4,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-
-interface Company {
-  id: string;
-  name: string;
-  cnpj: string;
-  createdAt: string;
-}
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Company } from '../../models/company.model';
+import { CompanyService } from '../../services/company.service';
 
 @Component({
   selector: 'app-companies',
@@ -20,7 +17,9 @@ interface Company {
     MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './companies.component.html',
   styleUrl: './companies.component.scss'
@@ -28,34 +27,30 @@ interface Company {
 export class CompaniesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'cnpj', 'createdAt', 'actions'];
   companies: Company[] = [];
+  loading = false;
+
+  constructor(
+    private companyService: CompanyService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    // TODO: Load companies from API
     this.loadCompanies();
   }
 
   loadCompanies(): void {
-    // Mock data for now
-    this.companies = [
-      {
-        id: '1',
-        name: 'Acme Corporation',
-        cnpj: '12.345.678/0001-90',
-        createdAt: '2025-01-15'
+    this.loading = true;
+    this.companyService.getAll().subscribe({
+      next: (companies) => {
+        this.companies = companies;
+        this.loading = false;
       },
-      {
-        id: '2',
-        name: 'Global Industries',
-        cnpj: '98.765.432/0001-10',
-        createdAt: '2025-02-20'
-      },
-      {
-        id: '3',
-        name: 'Tech Innovations',
-        cnpj: '55.666.777/0001-88',
-        createdAt: '2025-03-10'
+      error: (error) => {
+        console.error('Error loading companies:', error);
+        this.snackBar.open('Error loading companies', 'Close', { duration: 3000 });
+        this.loading = false;
       }
-    ];
+    });
   }
 
   createCompany(): void {
@@ -69,7 +64,17 @@ export class CompaniesComponent implements OnInit {
   }
 
   deleteCompany(company: Company): void {
-    // TODO: Confirm and delete company
-    console.log('Delete company:', company);
+    if (confirm(`Are you sure you want to delete ${company.name}?`)) {
+      this.companyService.delete(company.id).subscribe({
+        next: () => {
+          this.snackBar.open('Company deleted successfully', 'Close', { duration: 3000 });
+          this.loadCompanies();
+        },
+        error: (error) => {
+          console.error('Error deleting company:', error);
+          this.snackBar.open('Error deleting company', 'Close', { duration: 3000 });
+        }
+      });
+    }
   }
 }

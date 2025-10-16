@@ -11,7 +11,11 @@
   </div>
 
   <mat-card class="table-card">
-    <table mat-table [dataSource]="assets" class="assets-table">
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="assets" class="assets-table" *ngIf="!loading">
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Asset</th>
@@ -61,7 +65,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
     </table>
 
-    <div *ngIf="assets.length === 0" class="empty-state">
+    <div *ngIf="assets.length === 0 && !loading" class="empty-state">
       <mat-icon class="empty-icon">devices</mat-icon>
       <h3>No assets yet</h3>
       <p>Get started by adding your first asset</p>
