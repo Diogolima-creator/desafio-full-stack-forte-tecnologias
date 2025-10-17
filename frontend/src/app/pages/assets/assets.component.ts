@@ -7,8 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Asset, AssetStatus } from '../../models/asset.model';
 import { AssetService } from '../../services/asset.service';
+import { AssetDialogComponent } from '../../components/dialogs/asset-dialog.component';
 
 @Component({
   selector: 'app-assets',
@@ -21,7 +23,8 @@ import { AssetService } from '../../services/asset.service';
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   templateUrl: './assets.component.html',
   styleUrl: './assets.component.scss'
@@ -33,7 +36,8 @@ export class AssetsComponent implements OnInit {
 
   constructor(
     private assetService: AssetService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -74,13 +78,47 @@ export class AssetsComponent implements OnInit {
   }
 
   createAsset(): void {
-    // TODO: Open dialog to create asset
-    console.log('Create asset');
+    const dialogRef = this.dialog.open(AssetDialogComponent, {
+      width: '500px',
+      data: { mode: 'create' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.assetService.create(result).subscribe({
+          next: () => {
+            this.snackBar.open('Asset created successfully', 'Close', { duration: 3000 });
+            this.loadAssets();
+          },
+          error: (error) => {
+            console.error('Error creating asset:', error);
+            this.snackBar.open(error.error?.message || 'Error creating asset', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   editAsset(asset: Asset): void {
-    // TODO: Open dialog to edit asset
-    console.log('Edit asset:', asset);
+    const dialogRef = this.dialog.open(AssetDialogComponent, {
+      width: '500px',
+      data: { asset, mode: 'edit' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.assetService.update(asset.id, result).subscribe({
+          next: () => {
+            this.snackBar.open('Asset updated successfully', 'Close', { duration: 3000 });
+            this.loadAssets();
+          },
+          error: (error) => {
+            console.error('Error updating asset:', error);
+            this.snackBar.open(error.error?.message || 'Error updating asset', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   deleteAsset(asset: Asset): void {

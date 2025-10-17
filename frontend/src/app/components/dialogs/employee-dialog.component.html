@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Employee Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter employee name">
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        Employee name is required
+      </mat-error>
+      <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+        Employee name must be at least 3 characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="employee@company.com">
+      <mat-error *ngIf="form.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">
+        Please enter a valid email address
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>CPF</mat-label>
+      <input matInput formControlName="cpf" placeholder="000.000.000-00">
+      <mat-error *ngIf="form.get('cpf')?.hasError('required')">
+        CPF is required
+      </mat-error>
+      <mat-error *ngIf="form.get('cpf')?.hasError('pattern')">
+        CPF must be in format: 000.000.000-00
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Company</mat-label>
+      <mat-select formControlName="companyId">
+        <mat-option *ngFor="let company of companies" [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('companyId')?.hasError('required')">
+        Company is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    {{ mode === 'create' ? 'Create' : 'Save' }}
+  </button>
+</mat-dialog-actions>

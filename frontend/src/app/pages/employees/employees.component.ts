@@ -7,8 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Employee } from '../../models/employee.model';
 import { EmployeeService } from '../../services/employee.service';
+import { EmployeeDialogComponent } from '../../components/dialogs/employee-dialog.component';
 
 @Component({
   selector: 'app-employees',
@@ -21,7 +23,8 @@ import { EmployeeService } from '../../services/employee.service';
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss'
@@ -33,7 +36,8 @@ export class EmployeesComponent implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -56,13 +60,47 @@ export class EmployeesComponent implements OnInit {
   }
 
   createEmployee(): void {
-    // TODO: Open dialog to create employee
-    console.log('Create employee');
+    const dialogRef = this.dialog.open(EmployeeDialogComponent, {
+      width: '500px',
+      data: { mode: 'create' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeService.create(result).subscribe({
+          next: () => {
+            this.snackBar.open('Employee created successfully', 'Close', { duration: 3000 });
+            this.loadEmployees();
+          },
+          error: (error) => {
+            console.error('Error creating employee:', error);
+            this.snackBar.open(error.error?.message || 'Error creating employee', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   editEmployee(employee: Employee): void {
-    // TODO: Open dialog to edit employee
-    console.log('Edit employee:', employee);
+    const dialogRef = this.dialog.open(EmployeeDialogComponent, {
+      width: '500px',
+      data: { employee, mode: 'edit' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.employeeService.update(employee.id, result).subscribe({
+          next: () => {
+            this.snackBar.open('Employee updated successfully', 'Close', { duration: 3000 });
+            this.loadEmployees();
+          },
+          error: (error) => {
+            console.error('Error updating employee:', error);
+            this.snackBar.open(error.error?.message || 'Error updating employee', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   deleteEmployee(employee: Employee): void {

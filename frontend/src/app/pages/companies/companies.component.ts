@@ -6,8 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Company } from '../../models/company.model';
 import { CompanyService } from '../../services/company.service';
+import { CompanyDialogComponent } from '../../components/dialogs/company-dialog.component';
 
 @Component({
   selector: 'app-companies',
@@ -19,7 +21,8 @@ import { CompanyService } from '../../services/company.service';
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   templateUrl: './companies.component.html',
   styleUrl: './companies.component.scss'
@@ -31,7 +34,8 @@ export class CompaniesComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -54,13 +58,47 @@ export class CompaniesComponent implements OnInit {
   }
 
   createCompany(): void {
-    // TODO: Open dialog to create company
-    console.log('Create company');
+    const dialogRef = this.dialog.open(CompanyDialogComponent, {
+      width: '500px',
+      data: { mode: 'create' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.companyService.create(result).subscribe({
+          next: () => {
+            this.snackBar.open('Company created successfully', 'Close', { duration: 3000 });
+            this.loadCompanies();
+          },
+          error: (error) => {
+            console.error('Error creating company:', error);
+            this.snackBar.open(error.error?.message || 'Error creating company', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   editCompany(company: Company): void {
-    // TODO: Open dialog to edit company
-    console.log('Edit company:', company);
+    const dialogRef = this.dialog.open(CompanyDialogComponent, {
+      width: '500px',
+      data: { company, mode: 'edit' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.companyService.update(company.id, result).subscribe({
+          next: () => {
+            this.snackBar.open('Company updated successfully', 'Close', { duration: 3000 });
+            this.loadCompanies();
+          },
+          error: (error) => {
+            console.error('Error updating company:', error);
+            this.snackBar.open(error.error?.message || 'Error updating company', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   deleteCompany(company: Company): void {
