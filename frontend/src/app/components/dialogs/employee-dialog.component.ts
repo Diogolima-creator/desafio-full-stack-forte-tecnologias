@@ -45,7 +45,7 @@ export class EmployeeDialogComponent implements OnInit {
     this.form = this.fb.group({
       name: [data.employee?.name || '', [Validators.required, Validators.minLength(3)]],
       email: [data.employee?.email || '', [Validators.required, Validators.email]],
-      cpf: [data.employee?.cpf || '', [Validators.required, Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)]],
+      cpf: [data.employee?.cpf || '', [Validators.required]],
       companyId: [data.employee?.companyId || '', [Validators.required]]
     });
   }

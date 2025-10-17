@@ -30,9 +30,6 @@
       <mat-error *ngIf="form.get('cpf')?.hasError('required')">
         CPF is required
       </mat-error>
-      <mat-error *ngIf="form.get('cpf')?.hasError('pattern')">
-        CPF must be in format: 000.000.000-00
-      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">

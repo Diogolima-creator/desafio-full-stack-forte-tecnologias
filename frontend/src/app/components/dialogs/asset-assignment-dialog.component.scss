@@ -50,12 +50,6 @@
       }
     }
 
-    .mat-mdc-input-element {
-      color: #ffffff;
-      font-size: 15px;
-      background-color: transparent !important;
-    }
-
     .mat-mdc-floating-label {
       color: rgba(255, 255, 255, 0.7);
       font-size: 15px;
@@ -72,6 +66,16 @@
       .mat-mdc-floating-label {
         color: #3b82f6;
       }
+    }
+
+    .mat-mdc-select {
+      color: #ffffff;
+      font-size: 15px;
+      background-color: transparent !important;
+    }
+
+    .mat-mdc-select-arrow {
+      color: rgba(255, 255, 255, 0.7);
     }
 
     .mat-mdc-form-field-error {

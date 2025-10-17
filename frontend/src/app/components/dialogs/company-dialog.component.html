@@ -19,9 +19,6 @@
       <mat-error *ngIf="form.get('cnpj')?.hasError('required')">
         CNPJ is required
       </mat-error>
-      <mat-error *ngIf="form.get('cnpj')?.hasError('pattern')">
-        CNPJ must be in format: 00.000.000/0000-00
-      </mat-error>
     </mat-form-field>
   </form>
 </mat-dialog-content>

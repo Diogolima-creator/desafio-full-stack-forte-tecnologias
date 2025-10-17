@@ -21,6 +21,9 @@
         <th mat-header-cell *matHeaderCellDef>Asset</th>
         <td mat-cell *matCellDef="let asset">
           <div class="asset-name">{{ asset.name }}</div>
+          <div class="asset-assignment" *ngIf="asset.employees && asset.employees.length > 0">
+            Assigned to {{ asset.employees[0].employee?.name }}
+          </div>
         </td>
       </ng-container>
 
@@ -52,6 +55,23 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let asset">
+          <button mat-icon-button (click)="assignAsset(asset)"
+                  class="action-button"
+                  *ngIf="!asset.employees || asset.employees.length === 0"
+                  matTooltip="Assign to Employee">
+            <mat-icon>person_add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="unassignAsset(asset)"
+                  class="action-button"
+                  *ngIf="asset.employees && asset.employees.length > 0"
+                  matTooltip="Unassign">
+            <mat-icon>person_remove</mat-icon>
+          </button>
+          <button mat-icon-button (click)="changeStatus(asset)"
+                  class="action-button"
+                  matTooltip="Change Status">
+            <mat-icon>sync_alt</mat-icon>
+          </button>
           <button mat-icon-button (click)="editAsset(asset)" class="action-button">
             <mat-icon>edit</mat-icon>
           </button>

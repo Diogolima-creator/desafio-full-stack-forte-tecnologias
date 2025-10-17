@@ -33,7 +33,6 @@ export class AssetDialogComponent {
   mode: 'create' | 'edit';
   statusOptions = [
     { value: AssetStatus.DISPONIVEL, label: 'Available' },
-    { value: AssetStatus.EM_USO, label: 'In Use' },
     { value: AssetStatus.EM_MANUTENCAO, label: 'Maintenance' }
   ];
 

@@ -58,3 +58,25 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Material Select Panel */
+.mat-mdc-select-panel {
+  background-color: rgba(20, 20, 20, 0.98) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+  .mat-mdc-option {
+    color: #ffffff !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    &.mat-mdc-option-active,
+    &.mdc-list-item--selected {
+      background-color: rgba(59, 130, 246, 0.2) !important;
+      color: #3b82f6 !important;
+    }
+  }
+}

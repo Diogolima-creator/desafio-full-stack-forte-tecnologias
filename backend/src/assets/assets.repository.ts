@@ -16,6 +16,19 @@ export class AssetsRepository {
 
   async findAll(): Promise<Asset[]> {
     return this.prisma.asset.findMany({
+      include: {
+        employees: {
+          include: {
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -25,6 +38,19 @@ export class AssetsRepository {
   async findOne(id: string): Promise<Asset | null> {
     return this.prisma.asset.findUnique({
       where: { id },
+      include: {
+        employees: {
+          include: {
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 

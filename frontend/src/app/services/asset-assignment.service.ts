@@ -18,7 +18,7 @@ export class AssetAssignmentService {
   }
 
   unassign(data: UnassignAssetDto): Observable<AssetEmployee> {
-    return this.http.post<AssetEmployee>(`${this.apiUrl}/unassign`, data);
+    return this.http.delete<AssetEmployee>(`${this.apiUrl}/unassign`, { body: data });
   }
 
   getAssetsByEmployee(employeeId: string): Observable<Asset[]> {

@@ -9,8 +9,21 @@ export interface Asset {
   name: string;
   type: string;
   status: AssetStatus;
+  employees?: AssetAssignment[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AssetAssignment {
+  id: string;
+  assetId: string;
+  employeeId: string;
+  assignedAt: string;
+  employee?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface CreateAssetDto {

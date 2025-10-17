@@ -38,7 +38,7 @@ export class CompanyDialogComponent {
     this.mode = data.mode;
     this.form = this.fb.group({
       name: [data.company?.name || '', [Validators.required, Validators.minLength(3)]],
-      cnpj: [data.company?.cnpj || '', [Validators.required, Validators.pattern(/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/)]]
+      cnpj: [data.company?.cnpj || '', [Validators.required]]
     });
   }
 

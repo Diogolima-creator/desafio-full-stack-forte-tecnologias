@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width" *ngIf="mode === 'assign'">
+      <mat-label>Select Employee</mat-label>
+      <mat-select formControlName="employeeId">
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          {{ employee.name }} - {{ employee.company?.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('employeeId')?.hasError('required')">
+        Employee is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="mode === 'status'">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('status')?.hasError('required')">
+        Status is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+    {{ mode === 'assign' ? 'Assign' : 'Update' }}
+  </button>
+</mat-dialog-actions>
